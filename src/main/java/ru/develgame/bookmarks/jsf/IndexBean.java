@@ -2,7 +2,9 @@ package ru.develgame.bookmarks.jsf;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import ru.develgame.bookmarks.dao.BookmarkDao;
 import ru.develgame.bookmarks.dao.BookmarkFolderDao;
+import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 import ru.develgame.bookmarks.exception.BookmarkFolderNotFoundException;
 import ru.develgame.bookmarks.jsf.model.BookmarkNode;
@@ -15,7 +17,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Named("index")
 @ViewScoped
@@ -27,38 +29,107 @@ public class IndexBean implements Serializable {
     private transient BookmarkFolderDao bookmarkFolderDao;
 
     @Inject
-    private transient Logger logger;
+    private transient BookmarkDao bookmarkDao;
 
     private TreeNode<BookmarkNode> root;
+
+    private List<BookmarkNode> bookmarkFolderNodes;
+
+    private BookmarkNode bookmarkFolderNode;
+
+    private String bookmarkName;
+
+    private String bookmarkLink;
 
     @PostConstruct
     public void init() {
         bookmarkFolderDao.createRootIfNotExists();
 
-        final List<TreeNode<BookmarkNode>> allBookmarks = new ArrayList<>();
+        final List<TreeNode<BookmarkNode>> allBookmarkFolders = new ArrayList<>();
+        final List<Integer> allFolderIds = new ArrayList<>();
 
-        List<BookmarkFolder> bookmarks = bookmarkFolderDao.findAllByUsername();
+        List<BookmarkFolder> bookmarkFolders = bookmarkFolderDao.findAllByUsername();
 
-        for (BookmarkFolder elem : bookmarks) {
+        for (BookmarkFolder elem : bookmarkFolders) {
             BookmarkNode node = bookmarkMapper.toNode(elem);
 
             if (root == null) {
                 root = new DefaultTreeNode<>(node, null);
-                allBookmarks.add(root);
-
-                logger.warning(root.getData().getName());
+                allBookmarkFolders.add(root);
             }
             else {
-                DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarks.stream()
+                DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
                         .filter(t -> t.getData().getId() == elem.getParentId())
                         .findFirst()
                         .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
-                allBookmarks.add(defaultTreeNode);
+                allBookmarkFolders.add(defaultTreeNode);
             }
+
+            allFolderIds.add(elem.getId());
         }
+
+        List<Bookmark> bookmarks = bookmarkDao.findAllByParentIdIn(allFolderIds);
+        for (Bookmark elem : bookmarks) {
+            BookmarkNode node = bookmarkMapper.toNode(elem);
+
+            DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
+                    .filter(t -> t.getData().getId() == elem.getFolderId())
+                    .findFirst()
+                    .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
+        }
+
+        bookmarkFolderNodes = allBookmarkFolders.stream().skip(1).map(t -> t.getData()).collect(Collectors.toList());
+    }
+
+    public void addBookmark() {
+        if (bookmarkName == null || bookmarkName.isEmpty()) {
+            return;
+        }
+
+        if (bookmarkLink == null || bookmarkLink.isEmpty()) {
+            return;
+        }
+
+        if (bookmarkFolderNode == null) {
+            return;
+        }
+
+        bookmarkDao.createBookmark(bookmarkName, bookmarkLink, bookmarkFolderNode.getId());
+
+        bookmarkName = null;
+        bookmarkLink = null;
+        bookmarkFolderNode = null;
     }
 
     public TreeNode<BookmarkNode> getRoot() {
         return root;
+    }
+
+    public String getBookmarkName() {
+        return bookmarkName;
+    }
+
+    public void setBookmarkName(String bookmarkName) {
+        this.bookmarkName = bookmarkName;
+    }
+
+    public String getBookmarkLink() {
+        return bookmarkLink;
+    }
+
+    public void setBookmarkLink(String bookmarkLink) {
+        this.bookmarkLink = bookmarkLink;
+    }
+
+    public List<BookmarkNode> getBookmarkFolderNodes() {
+        return bookmarkFolderNodes;
+    }
+
+    public BookmarkNode getBookmarkFolderNode() {
+        return bookmarkFolderNode;
+    }
+
+    public void setBookmarkFolderNode(BookmarkNode bookmarkFolderNode) {
+        this.bookmarkFolderNode = bookmarkFolderNode;
     }
 }
