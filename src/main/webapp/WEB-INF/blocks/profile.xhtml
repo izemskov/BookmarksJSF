@@ -1,0 +1,9 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+   <p:avatar icon="pi pi-user" id="profile" styleClass="mr-2" size="large" />
+   <p:overlayPanel for="profile" style="width:350px" showCloseIcon="true">
+      <p>Username: #{userBean.username}</p>
+      <p><p:commandButton action="#{logoutBean.logout()}" value="Logout" /></p>
+   </p:overlayPanel>
+</ui:composition>
