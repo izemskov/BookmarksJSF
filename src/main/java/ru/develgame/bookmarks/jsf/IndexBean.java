@@ -33,7 +33,6 @@ public class IndexBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        logger.warning("AAAAAAAAAAAAAAAAAAAAA");
         bookmarkFolderDao.createRootIfNotExists();
 
         final List<TreeNode<BookmarkNode>> allBookmarks = new ArrayList<>();

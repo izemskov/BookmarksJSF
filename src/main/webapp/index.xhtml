@@ -12,12 +12,12 @@
 </h:head>
 <h:body>
     <h:form>
-        <p:treeTable id="bookmarks" value="#{index.root}" var="bookmark" selectionMode="single">
+        <p:treeTable id="bookmarks" value="#{index.root}" var="bookmarkNode" selectionMode="single">
             <f:facet name="header">
                 Bookmarks Viewer
             </f:facet>
             <p:column headerText="Name">
-                <h:outputText value="TETSTST"/>
+                <h:outputText value="#{bookmarkNode.name}"/>
             </p:column>
         </p:treeTable>
     </h:form>
