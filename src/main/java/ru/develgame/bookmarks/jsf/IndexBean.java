@@ -8,7 +8,6 @@ import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 import ru.develgame.bookmarks.exception.BookmarkFolderNotFoundException;
 import ru.develgame.bookmarks.jsf.model.BookmarkNode;
-import ru.develgame.bookmarks.jsf.model.Console;
 import ru.develgame.bookmarks.mappers.BookmarkMapper;
 
 import javax.annotation.PostConstruct;
