@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+   <p:dialog header="Add bookmark"
+             widgetVar="addBookmarkDlg"
+             minHeight="40"
+             width="800"
+             showEffect="fade"
+             appendTo="@Body"
+             closable="true">
+       <h:form id="test">
+         <p:inputText id="name" value="#{index.bookmarkName}" style="margin-top: 10px; width: 100%; font-size: 14px;"/>
+         <p:inputText id="link" value="#{index.bookmarkLink}" style="margin-top: 10px; width: 100%; font-size: 14px;"/>
+         <p:selectOneMenu id="folder" value="#{index.bookmarkFolderNode}" style="margin-top: 10px; width: 100%; font-size: 14px;">
+            <f:selectItems value="#{index.bookmarkFolderNodes}"/>
+         </p:selectOneMenu>
+         <p:commandButton id="addBookmarkBtn"
+                          value="Add"
+                          process="@form"
+                          action="#{index.addBookmark()}"
+                          style="margin-top: 10px;"/>
+       </h:form>
+   </p:dialog>
+</ui:composition>

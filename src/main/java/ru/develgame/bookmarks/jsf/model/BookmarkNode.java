@@ -1,5 +1,7 @@
 package ru.develgame.bookmarks.jsf.model;
 
+import java.util.Objects;
+
 public class BookmarkNode {
     private String name;
 
@@ -49,7 +51,15 @@ public class BookmarkNode {
     }
 
     @Override
-    public String toString() {
-        return name;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookmarkNode that = (BookmarkNode) o;
+        return folder == that.folder && id == that.id && Objects.equals(name, that.name) && Objects.equals(link, that.link);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, link, folder, id);
     }
 }

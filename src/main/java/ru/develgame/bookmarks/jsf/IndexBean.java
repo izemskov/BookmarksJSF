@@ -8,9 +8,13 @@ import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 import ru.develgame.bookmarks.exception.BookmarkFolderNotFoundException;
 import ru.develgame.bookmarks.jsf.model.BookmarkNode;
+import ru.develgame.bookmarks.jsf.model.Console;
 import ru.develgame.bookmarks.mappers.BookmarkMapper;
 
 import javax.annotation.PostConstruct;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Named("index")
 @ViewScoped
-public class IndexBean implements Serializable {
+public class IndexBean implements Serializable, Converter {
     @Inject
     private transient BookmarkMapper bookmarkMapper;
 
@@ -131,5 +135,20 @@ public class IndexBean implements Serializable {
 
     public void setBookmarkFolderNode(BookmarkNode bookmarkFolderNode) {
         this.bookmarkFolderNode = bookmarkFolderNode;
+    }
+
+    @Override
+    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
+        int id = Integer.parseInt(s);
+
+        return bookmarkFolderNodes.stream()
+                .filter(t -> t.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node id %s", s)));
+    }
+
+    @Override
+    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
+        return Integer.toString(((BookmarkNode) o).getId());
     }
 }
