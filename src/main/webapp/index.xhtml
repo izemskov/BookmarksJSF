@@ -8,10 +8,12 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Image Test</title>
+    <title>Bookmarks</title>
 </h:head>
 <h:body>
     <h:form>
+        <p:remoteCommand name="updateBookmarks" action="#{index.loadModel()}"
+                         update="@form"/>
         <div style="margin-bottom: 20px;">
             <p:commandButton value="Add bookmark" style="width: 150px; margin-right: 20px;" onclick="PF('addBookmarkDlg').show()" update="@form"/>
             <p:commandButton value="Add folder" style="width: 150px;" onclick="PF('addBookmarkDlg').show()" update="@form"/>
@@ -29,7 +31,7 @@
 
     <br/>
 
-    <p:dialog header="Add bookmark" widgetVar="addBookmarkDlg" minHeight="40" width="800" showEffect="fade" modal="true" closable="true">
+    <p:dialog header="Add bookmark" widgetVar="addBookmarkDlg" minHeight="40" width="800" showEffect="fade" onHide="PF('bookmarks').filter()" modal="true" closable="true">
         <h:form>
             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tbody>

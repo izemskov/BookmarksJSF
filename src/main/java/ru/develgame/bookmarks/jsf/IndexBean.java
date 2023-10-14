@@ -44,8 +44,7 @@ public class IndexBean implements Serializable, Converter {
 
     private String bookmarkLink;
 
-    @PostConstruct
-    public void init() {
+    public void loadModel() {
         bookmarkFolderDao.createRootIfNotExists();
 
         final List<TreeNode<BookmarkNode>> allBookmarkFolders = new ArrayList<>();
@@ -58,6 +57,7 @@ public class IndexBean implements Serializable, Converter {
 
             if (root == null) {
                 root = new DefaultTreeNode<>(node, null);
+                root.setExpanded(true);
                 allBookmarkFolders.add(root);
             }
             else {
@@ -65,6 +65,7 @@ public class IndexBean implements Serializable, Converter {
                         .filter(t -> t.getData().getId() == elem.getParentId())
                         .findFirst()
                         .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
+                defaultTreeNode.setExpanded(true);
                 allBookmarkFolders.add(defaultTreeNode);
             }
 
@@ -82,6 +83,11 @@ public class IndexBean implements Serializable, Converter {
         }
 
         bookmarkFolderNodes = allBookmarkFolders.stream().skip(1).map(t -> t.getData()).collect(Collectors.toList());
+    }
+
+    @PostConstruct
+    public void init() {
+        loadModel();
     }
 
     public void addBookmark() {
