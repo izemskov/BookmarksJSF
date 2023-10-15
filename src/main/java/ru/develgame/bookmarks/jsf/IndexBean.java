@@ -45,6 +45,8 @@ public class IndexBean implements Serializable, Converter {
     private String bookmarkLink;
 
     public void loadModel() {
+        root = null;
+
         bookmarkFolderDao.createRootIfNotExists();
 
         final List<TreeNode<BookmarkNode>> allBookmarkFolders = new ArrayList<>();
