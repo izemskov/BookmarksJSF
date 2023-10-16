@@ -13,18 +13,19 @@ public class BookmarkFolder {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "PARENT_ID")
-    private Integer parentId;
+    @ManyToOne
+    @JoinColumn(name="PARENT_ID")
+    private BookmarkFolder parent;
 
     @Column(name = "USERNAME")
     private String username;
 
     public BookmarkFolder() {}
 
-    public BookmarkFolder(int id, String name, Integer parentId, String username) {
+    public BookmarkFolder(int id, String name, BookmarkFolder parent, String username) {
         this.id = id;
         this.name = name;
-        this.parentId = parentId;
+        this.parent = parent;
         this.username = username;
     }
 
@@ -44,12 +45,12 @@ public class BookmarkFolder {
         this.name = name;
     }
 
-    public Integer getParentId() {
-        return parentId;
+    public BookmarkFolder getParent() {
+        return parent;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setParent(BookmarkFolder parent) {
+        this.parent = parent;
     }
 
     public String getUsername() {

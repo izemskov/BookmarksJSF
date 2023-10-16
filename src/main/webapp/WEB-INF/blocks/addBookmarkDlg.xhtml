@@ -3,24 +3,65 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-   <p:dialog header="Add bookmark"
-             widgetVar="addBookmarkDlg"
-             minHeight="40"
-             width="800"
-             showEffect="fade"
-             appendTo="@Body"
-             closable="true">
-       <h:form id="test">
-         <p:inputText id="name" value="#{index.bookmarkName}" style="margin-top: 10px; width: 100%; font-size: 14px;"/>
-         <p:inputText id="link" value="#{index.bookmarkLink}" style="margin-top: 10px; width: 100%; font-size: 14px;"/>
-         <p:selectOneMenu id="folder" value="#{index.bookmarkFolderNode}" style="margin-top: 10px; width: 100%; font-size: 14px;">
-            <f:selectItems value="#{index.bookmarkFolderNodes}"/>
-         </p:selectOneMenu>
-         <p:commandButton id="addBookmarkBtn"
-                          value="Add"
-                          process="@form"
-                          action="#{index.addBookmark()}"
-                          style="margin-top: 10px;"/>
-       </h:form>
-   </p:dialog>
+    <p:dialog header="Add bookmark"
+              widgetVar="addBookmarkDlg"
+              minHeight="40"
+              width="800"
+              showEffect="fade"
+              onHide="updateBookmarks()"
+              modal="true"
+              closable="true">
+        <h:form>
+            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody>
+                <tr>
+                    <td>
+                        Name:
+                    </td>
+                    <td>
+                        <p:inputText id="name" value="#{index.addBookmarkDlg.bookmarkName}" style="margin-top: 10px; width: 100%; font-size: 14px;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Link:
+                    </td>
+                    <td>
+                        <p:inputText id="link" value="#{index.addBookmarkDlg.bookmarkLink}" style="margin-top: 10px; width: 100%; font-size: 14px;"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Folder:
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="folder"
+                                         value="#{index.addBookmarkDlg.bookmarkFolderNode}"
+                                         style="margin-top: 10px; width: 100%; font-size: 14px;"
+                                         converter="#{index}">
+                            <f:selectItems value="#{index.bookmarkFolderNodes}"
+                                           var="entry"
+                                           itemLabel="#{entry.name}"
+                                           itemValue="#{entry}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                    </td>
+                    <td align="right">
+                        <p:commandButton id="addBookmarkBtn"
+                                         value="Add"
+                                         actionListener="#{index.addBookmarkDlg.addBookmark()}"
+                                         oncomplete="PF('addBookmarkDlg').hide()"
+                                         update="@form"
+                                         style="margin-top: 10px;"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </h:form>
+    </p:dialog>
 </ui:composition>

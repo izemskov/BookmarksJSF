@@ -55,7 +55,13 @@ public class BookmarkFolderDaoImpl implements BookmarkFolderDao {
 
             BookmarkFolder bookmarkFolder = new BookmarkFolder();
             bookmarkFolder.setName(name);
-            bookmarkFolder.setParentId(parentId);
+            BookmarkFolder parent = null;
+            if (parentId != null) {
+                parent = entityManager.find(BookmarkFolder.class, parentId);
+            }
+            if (parent != null) {
+                bookmarkFolder.setParent(parent);
+            }
             bookmarkFolder.setUsername(userBean.getUsername());
 
             entityManager.persist(bookmarkFolder);
