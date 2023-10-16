@@ -8,6 +8,7 @@ import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 import ru.develgame.bookmarks.exception.BookmarkFolderNotFoundException;
 import ru.develgame.bookmarks.jsf.dialog.AddBookmarkDlg;
+import ru.develgame.bookmarks.jsf.dialog.AddBookmarkFolderDlg;
 import ru.develgame.bookmarks.jsf.model.BookmarkNode;
 import ru.develgame.bookmarks.mappers.BookmarkMapper;
 
@@ -37,6 +38,9 @@ public class IndexBean implements Serializable, Converter {
 
     @Inject
     private AddBookmarkDlg addBookmarkDlg;
+
+    @Inject
+    private AddBookmarkFolderDlg addBookmarkFolderDlg;
 
     private TreeNode<BookmarkNode> root;
 
@@ -139,5 +143,9 @@ public class IndexBean implements Serializable, Converter {
 
     public AddBookmarkDlg getAddBookmarkDlg() {
         return addBookmarkDlg;
+    }
+
+    public AddBookmarkFolderDlg getAddBookmarkFolderDlg() {
+        return addBookmarkFolderDlg;
     }
 }

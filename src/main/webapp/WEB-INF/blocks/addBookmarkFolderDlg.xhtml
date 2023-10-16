@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog header="Add bookmark folder"
+              widgetVar="addBookmarkFolderDlg"
+              minHeight="40"
+              width="800"
+              showEffect="fade"
+              onHide="updateBookmarks()"
+              modal="true"
+              closable="true">
+        <h:form>
+            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tbody>
+                <tr>
+                    <td>
+                        Name:
+                    </td>
+                    <td>
+                        <p:inputText id="bookmarkFolderName"
+                                     value="#{index.addBookmarkFolderDlg.bookmarkFolderName}"
+                                     style="margin-top: 10px; width: 100%; font-size: 14px;"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        Parent:
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="bookmarkFolderParent"
+                                         value="#{index.addBookmarkFolderDlg.bookmarkParentNode}"
+                                         style="margin-top: 10px; width: 100%; font-size: 14px;"
+                                         converter="#{index}">
+                            <f:selectItems value="#{index.bookmarkFolderNodes}"
+                                           var="entry"
+                                           itemLabel="#{entry.name}"
+                                           itemValue="#{entry}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                    </td>
+                    <td align="right">
+                        <p:commandButton id="addBookmarkFolderBtn"
+                                         value="Add"
+                                         actionListener="#{index.addBookmarkFolderDlg.addBookmarkFolder()}"
+                                         oncomplete="PF('addBookmarkFolderDlg').hide()"
+                                         update="@form"
+                                         style="margin-top: 10px;"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </h:form>
+    </p:dialog>
+</ui:composition>

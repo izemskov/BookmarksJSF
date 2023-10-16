@@ -15,17 +15,14 @@
                          update="@form"/>
         <div style="margin-bottom: 20px;">
             <p:commandButton value="Add bookmark" style="width: 150px; margin-right: 20px;" onclick="PF('addBookmarkDlg').show()" update="@form"/>
-            <p:commandButton value="Add folder" style="width: 150px;" onclick="PF('addBookmarkDlg').show()" update="@form"/>
+            <p:commandButton value="Add folder" style="width: 150px;" onclick="PF('addBookmarkFolderDlg').show()" update="@form"/>
         </div>
         <p:treeTable id="bookmarks"
                      value="#{index.root}"
                      var="bookmarkNode"
                      selectionMode="single"
                      selection="#{index.selectedNode}">
-            <f:facet name="header">
-                Bookmarks Viewer
-            </f:facet>
-            <p:column headerText="Name">
+            <p:column headerText="Bookmarks Viewer">
                 <h:outputText value="#{bookmarkNode.name}" rendered="#{bookmarkNode.folder}"/>
                 <p:link href="#{bookmarkNode.link}" value="#{bookmarkNode.name}" rendered="#{not bookmarkNode.folder}" target="_blank"/>
             </p:column>
@@ -38,5 +35,7 @@
     </h:form>
 
     <ui:include src="/WEB-INF/blocks/addBookmarkDlg.xhtml"/>
+
+    <ui:include src="/WEB-INF/blocks/addBookmarkFolderDlg.xhtml"/>
 </h:body>
 </html>
