@@ -40,7 +40,14 @@
 
     <br/>
 
-    <p:dialog header="Add bookmark" widgetVar="addBookmarkDlg" minHeight="40" width="800" showEffect="fade" onHide="updateBookmarks()" modal="true" closable="true">
+    <p:dialog header="Add bookmark"
+              widgetVar="addBookmarkDlg"
+              minHeight="40"
+              width="800"
+              showEffect="fade"
+              onHide="updateBookmarks()"
+              modal="true"
+              closable="true">
         <h:form>
             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tbody>
@@ -86,6 +93,7 @@
                                          value="Add"
                                          actionListener="#{index.addBookmark()}"
                                          oncomplete="PF('addBookmarkDlg').hide()"
+                                         update="@form"
                                          style="margin-top: 10px;"/>
                     </td>
                 </tr>
