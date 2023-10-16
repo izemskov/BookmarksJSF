@@ -18,7 +18,11 @@
             <p:commandButton value="Add bookmark" style="width: 150px; margin-right: 20px;" onclick="PF('addBookmarkDlg').show()" update="@form"/>
             <p:commandButton value="Add folder" style="width: 150px;" onclick="PF('addBookmarkDlg').show()" update="@form"/>
         </div>
-        <p:treeTable id="bookmarks" value="#{index.root}" var="bookmarkNode" selectionMode="single">
+        <p:treeTable id="bookmarks"
+                     value="#{index.root}"
+                     var="bookmarkNode"
+                     selectionMode="single"
+                     selection="#{index.selectedNode}">
             <f:facet name="header">
                 Bookmarks Viewer
             </f:facet>
@@ -27,6 +31,11 @@
                 <p:link href="#{bookmarkNode.link}" value="#{bookmarkNode.name}" rendered="#{not bookmarkNode.folder}" target="_blank"/>
             </p:column>
         </p:treeTable>
+
+        <p:contextMenu for="bookmarks">
+            <p:menuitem value="Delete" action="#{index.deleteNode}" update="bookmarks"
+                        icon="pi pi-times"/>
+        </p:contextMenu>
     </h:form>
 
     <br/>
@@ -84,6 +93,5 @@
             </table>
         </h:form>
     </p:dialog>
-
 </h:body>
 </html>

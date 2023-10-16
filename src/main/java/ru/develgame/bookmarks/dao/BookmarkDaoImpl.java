@@ -43,7 +43,29 @@ public class BookmarkDaoImpl implements BookmarkDao {
             entityManager.persist(bookmark);
             userTransaction.commit();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Cannot save bookmark folder", e);
+            logger.log(Level.SEVERE, "Cannot save bookmark", e);
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean deleteBookmark(int id) {
+        try {
+            userTransaction.begin();
+
+            Bookmark bookmark = entityManager.find(Bookmark.class, id);
+            if (bookmark == null) {
+                userTransaction.rollback();
+                return false;
+            }
+
+            entityManager.remove(bookmark);
+
+            userTransaction.commit();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Cannot delete bookmark", e);
             return false;
         }
 

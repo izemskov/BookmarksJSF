@@ -36,6 +36,8 @@ public class IndexBean implements Serializable, Converter {
 
     private TreeNode<BookmarkNode> root;
 
+    private TreeNode<BookmarkNode> selectedNode;
+
     private List<BookmarkNode> bookmarkFolderNodes;
 
     private BookmarkNode bookmarkFolderNode;
@@ -112,8 +114,42 @@ public class IndexBean implements Serializable, Converter {
         bookmarkFolderNode = null;
     }
 
+    @Override
+    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
+        int id = Integer.parseInt(s);
+
+        return bookmarkFolderNodes.stream()
+                .filter(t -> t.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node id %s", s)));
+    }
+
+    @Override
+    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
+        return Integer.toString(((BookmarkNode) o).getId());
+    }
+
+    public void deleteNode() {
+        if (!selectedNode.getData().isFolder()) {
+            if (bookmarkDao.deleteBookmark(selectedNode.getData().getId())) {
+                selectedNode.getChildren().clear();
+                selectedNode.getParent().getChildren().remove(selectedNode);
+                selectedNode.setParent(null);
+                selectedNode = null;
+            }
+        }
+    }
+
     public TreeNode<BookmarkNode> getRoot() {
         return root;
+    }
+
+    public TreeNode<BookmarkNode> getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(TreeNode<BookmarkNode> selectedNode) {
+        this.selectedNode = selectedNode;
     }
 
     public String getBookmarkName() {
@@ -142,20 +178,5 @@ public class IndexBean implements Serializable, Converter {
 
     public void setBookmarkFolderNode(BookmarkNode bookmarkFolderNode) {
         this.bookmarkFolderNode = bookmarkFolderNode;
-    }
-
-    @Override
-    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
-        int id = Integer.parseInt(s);
-
-        return bookmarkFolderNodes.stream()
-                .filter(t -> t.getId() == id)
-                .findFirst()
-                .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node id %s", s)));
-    }
-
-    @Override
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
-        return Integer.toString(((BookmarkNode) o).getId());
     }
 }

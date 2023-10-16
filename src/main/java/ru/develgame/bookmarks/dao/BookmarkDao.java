@@ -8,4 +8,6 @@ public interface BookmarkDao {
     List<Bookmark> findAllByParentIdIn(List<Integer> parents);
 
     boolean createBookmark(String name, String link, int folderId);
+
+    boolean deleteBookmark(int id);
 }
