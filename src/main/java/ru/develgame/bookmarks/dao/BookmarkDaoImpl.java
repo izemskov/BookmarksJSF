@@ -23,9 +23,12 @@ public class BookmarkDaoImpl implements BookmarkDao {
     @Inject
     private Logger logger;
 
+    @Inject
+    private BookmarkFolderDao bookmarkFolderDao;
+
     @Override
-    public List<Bookmark> findAllByParentIdIn(List<Integer> parents) {
-        Query query = entityManager.createQuery("SELECT a FROM Bookmark a WHERE a.folderId IN :param", Bookmark.class);
+    public List<Bookmark> findAllByParentIdIn(List<BookmarkFolder> parents) {
+        Query query = entityManager.createQuery("SELECT a FROM Bookmark a WHERE a.folder IN :param", Bookmark.class);
         query.setParameter("param", parents);
         return query.getResultList();
     }
@@ -38,7 +41,12 @@ public class BookmarkDaoImpl implements BookmarkDao {
             Bookmark bookmark = new Bookmark();
             bookmark.setLink(link);
             bookmark.setName(name);
-            bookmark.setFolderId(folderId);
+            BookmarkFolder folder = entityManager.find(BookmarkFolder.class, folderId);
+            if (folder == null) {
+                userTransaction.rollback();
+                return false;
+            }
+            bookmark.setFolder(folder);
 
             entityManager.persist(bookmark);
             userTransaction.commit();

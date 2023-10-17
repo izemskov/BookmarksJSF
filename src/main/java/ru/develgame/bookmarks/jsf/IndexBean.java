@@ -54,7 +54,7 @@ public class IndexBean implements Serializable, Converter {
         bookmarkFolderDao.createRootIfNotExists();
 
         final List<TreeNode<BookmarkNode>> allBookmarkFolders = new ArrayList<>();
-        final List<Integer> allFolderIds = new ArrayList<>();
+        final List<BookmarkFolder> allFolderIds = new ArrayList<>();
 
         List<BookmarkFolder> bookmarkFolders = bookmarkFolderDao.findAllByUsername();
 
@@ -75,7 +75,7 @@ public class IndexBean implements Serializable, Converter {
                 allBookmarkFolders.add(defaultTreeNode);
             }
 
-            allFolderIds.add(elem.getId());
+            allFolderIds.add(elem);
         }
 
         List<Bookmark> bookmarks = bookmarkDao.findAllByParentIdIn(allFolderIds);
@@ -83,7 +83,7 @@ public class IndexBean implements Serializable, Converter {
             BookmarkNode node = bookmarkMapper.toNode(elem);
 
             DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
-                    .filter(t -> t.getData().getId() == elem.getFolderId())
+                    .filter(t -> t.getData().getId() == elem.getFolder().getId())
                     .findFirst()
                     .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
         }
@@ -116,13 +116,20 @@ public class IndexBean implements Serializable, Converter {
 
     public void deleteNode() {
         if (!selectedNode.getData().isFolder()) {
-            if (bookmarkDao.deleteBookmark(selectedNode.getData().getId())) {
-                selectedNode.getChildren().clear();
-                selectedNode.getParent().getChildren().remove(selectedNode);
-                selectedNode.setParent(null);
-                selectedNode = null;
+            if (!bookmarkDao.deleteBookmark(selectedNode.getData().getId())) {
+                return;
             }
         }
+        else {
+            if (!bookmarkFolderDao.deleteBookmarkFolder(selectedNode.getData().getId())) {
+                return;
+            }
+        }
+
+        selectedNode.getChildren().clear();
+        selectedNode.getParent().getChildren().remove(selectedNode);
+        selectedNode.setParent(null);
+        selectedNode = null;
     }
 
     public TreeNode<BookmarkNode> getRoot() {

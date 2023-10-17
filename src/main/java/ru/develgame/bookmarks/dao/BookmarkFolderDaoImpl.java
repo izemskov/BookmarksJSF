@@ -1,5 +1,6 @@
 package ru.develgame.bookmarks.dao;
 
+import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 import ru.develgame.bookmarks.jsf.UserBean;
 
@@ -98,5 +99,25 @@ public class BookmarkFolderDaoImpl implements BookmarkFolderDao {
         return true;
     }
 
+    @Override
+    public boolean deleteBookmarkFolder(int id) {
+        try {
+            userTransaction.begin();
 
+            BookmarkFolder bookmarkFolder = entityManager.find(BookmarkFolder.class, id);
+            if (bookmarkFolder == null) {
+                userTransaction.rollback();
+                return false;
+            }
+
+            entityManager.remove(bookmarkFolder);
+
+            userTransaction.commit();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Cannot delete bookmark folder", e);
+            return false;
+        }
+
+        return true;
+    }
 }

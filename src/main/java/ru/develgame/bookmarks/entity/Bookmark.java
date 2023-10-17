@@ -10,8 +10,9 @@ public class Bookmark {
     @Column(name = "ID")
     private int id;
 
-    @Column(name = "FOLDER_ID")
-    private int folderId;
+    @ManyToOne
+    @JoinColumn(name="FOLDER_ID")
+    private BookmarkFolder folder;
 
     @Column(name = "NAME")
     private String name;
@@ -21,9 +22,9 @@ public class Bookmark {
 
     public Bookmark() {}
 
-    public Bookmark(int id, int folderId, String name, String link) {
+    public Bookmark(int id, BookmarkFolder folder, String name, String link) {
         this.id = id;
-        this.folderId = folderId;
+        this.folder = folder;
         this.name = name;
         this.link = link;
     }
@@ -36,12 +37,12 @@ public class Bookmark {
         this.id = id;
     }
 
-    public int getFolderId() {
-        return folderId;
+    public BookmarkFolder getFolder() {
+        return folder;
     }
 
-    public void setFolderId(int folderId) {
-        this.folderId = folderId;
+    public void setFolder(BookmarkFolder folder) {
+        this.folder = folder;
     }
 
     public String getName() {

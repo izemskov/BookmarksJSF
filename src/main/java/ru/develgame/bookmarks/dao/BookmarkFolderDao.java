@@ -12,4 +12,6 @@ public interface BookmarkFolderDao {
     boolean createBookmarkFolder(String name, Integer parentId);
 
     boolean createRootIfNotExists();
+
+    boolean deleteBookmarkFolder(int id);
 }

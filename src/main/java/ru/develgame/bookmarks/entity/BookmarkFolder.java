@@ -1,6 +1,8 @@
 package ru.develgame.bookmarks.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "BOOKMARKS_FOLDER", schema = "APP")
@@ -19,6 +21,9 @@ public class BookmarkFolder {
 
     @Column(name = "USERNAME")
     private String username;
+
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     public BookmarkFolder() {}
 
@@ -59,5 +64,13 @@ public class BookmarkFolder {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Bookmark> getBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(List<Bookmark> bookmarks) {
+        this.bookmarks = bookmarks;
     }
 }
