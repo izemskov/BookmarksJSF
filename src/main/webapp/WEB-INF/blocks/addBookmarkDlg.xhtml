@@ -8,10 +8,12 @@
               minHeight="40"
               width="800"
               showEffect="fade"
+              onShow="updateAddBookmarkDlg()"
               onHide="updateBookmarks()"
               modal="true"
               closable="true">
         <h:form>
+            <p:remoteCommand name="updateAddBookmarkDlg" update="@form"/>
             <table cellspacing="0" cellpadding="0" border="0" width="100%">
                 <tbody>
                 <tr>

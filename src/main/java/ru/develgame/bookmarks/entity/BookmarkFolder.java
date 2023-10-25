@@ -22,7 +22,7 @@ public class BookmarkFolder {
     @Column(name = "USERNAME")
     private String username;
 
-    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     public BookmarkFolder() {}

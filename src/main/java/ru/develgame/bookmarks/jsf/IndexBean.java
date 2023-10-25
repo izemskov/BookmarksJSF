@@ -65,6 +65,11 @@ public class IndexBean implements Serializable, Converter {
                 root = new DefaultTreeNode<>(node, null);
                 root.setExpanded(true);
                 allBookmarkFolders.add(root);
+
+                for (Bookmark bookmark : elem.getBookmarks()) {
+                    BookmarkNode bookmarkNode = bookmarkMapper.toNode(bookmark);
+                    new DefaultTreeNode<>(bookmarkNode, root);
+                }
             }
             else {
                 DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
@@ -73,20 +78,25 @@ public class IndexBean implements Serializable, Converter {
                         .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
                 defaultTreeNode.setExpanded(true);
                 allBookmarkFolders.add(defaultTreeNode);
+
+                for (Bookmark bookmark : elem.getBookmarks()) {
+                    BookmarkNode bookmarkNode = bookmarkMapper.toNode(bookmark);
+                    new DefaultTreeNode<>(bookmarkNode, defaultTreeNode);
+                }
             }
 
             allFolderIds.add(elem);
         }
 
-        List<Bookmark> bookmarks = bookmarkDao.findAllByParentIdIn(allFolderIds);
-        for (Bookmark elem : bookmarks) {
-            BookmarkNode node = bookmarkMapper.toNode(elem);
-
-            DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
-                    .filter(t -> t.getData().getId() == elem.getFolder().getId())
-                    .findFirst()
-                    .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
-        }
+//        List<Bookmark> bookmarks = bookmarkDao.findAllByParentIdIn(allFolderIds);
+//        for (Bookmark bookmark : bookmarks) {
+//            BookmarkNode node = bookmarkMapper.toNode(bookmark);
+//
+//            DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
+//                    .filter(t -> t.getData().getId() == bookmark.getFolder().getId())
+//                    .findFirst()
+//                    .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
+//        }
 
         bookmarkFolderNodes = allBookmarkFolders.stream()
                 .skip(1)

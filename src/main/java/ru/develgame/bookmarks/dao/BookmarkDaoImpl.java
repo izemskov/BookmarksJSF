@@ -4,6 +4,7 @@ import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 
 import javax.annotation.Resource;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@RequestScoped
 public class BookmarkDaoImpl implements BookmarkDao {
     @PersistenceContext
     private EntityManager entityManager;
@@ -25,13 +27,6 @@ public class BookmarkDaoImpl implements BookmarkDao {
 
     @Inject
     private BookmarkFolderDao bookmarkFolderDao;
-
-    @Override
-    public List<Bookmark> findAllByParentIdIn(List<BookmarkFolder> parents) {
-        Query query = entityManager.createQuery("SELECT a FROM Bookmark a WHERE a.folder IN :param", Bookmark.class);
-        query.setParameter("param", parents);
-        return query.getResultList();
-    }
 
     @Override
     public boolean createBookmark(String name, String link, int folderId) {
@@ -49,6 +44,8 @@ public class BookmarkDaoImpl implements BookmarkDao {
             bookmark.setFolder(folder);
 
             entityManager.persist(bookmark);
+            folder.getBookmarks().add(bookmark);
+            entityManager.persist(folder);
             userTransaction.commit();
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Cannot save bookmark", e);

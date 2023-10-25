@@ -1,10 +1,10 @@
 package ru.develgame.bookmarks.dao;
 
-import ru.develgame.bookmarks.entity.Bookmark;
 import ru.develgame.bookmarks.entity.BookmarkFolder;
 import ru.develgame.bookmarks.jsf.UserBean;
 
 import javax.annotation.Resource;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@RequestScoped
 public class BookmarkFolderDaoImpl implements BookmarkFolderDao {
     @PersistenceContext
     private EntityManager entityManager;
