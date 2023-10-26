@@ -25,6 +25,9 @@ public class BookmarkFolder {
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<BookmarkFolder> bookmarkFolders = new ArrayList<>();
+
     public BookmarkFolder() {}
 
     public BookmarkFolder(int id, String name, BookmarkFolder parent, String username) {
@@ -72,5 +75,13 @@ public class BookmarkFolder {
 
     public void setBookmarks(List<Bookmark> bookmarks) {
         this.bookmarks = bookmarks;
+    }
+
+    public List<BookmarkFolder> getBookmarkFolders() {
+        return bookmarkFolders;
+    }
+
+    public void setBookmarkFolders(List<BookmarkFolder> bookmarkFolders) {
+        this.bookmarkFolders = bookmarkFolders;
     }
 }

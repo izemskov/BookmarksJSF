@@ -88,18 +88,7 @@ public class IndexBean implements Serializable, Converter {
             allFolderIds.add(elem);
         }
 
-//        List<Bookmark> bookmarks = bookmarkDao.findAllByParentIdIn(allFolderIds);
-//        for (Bookmark bookmark : bookmarks) {
-//            BookmarkNode node = bookmarkMapper.toNode(bookmark);
-//
-//            DefaultTreeNode<BookmarkNode> defaultTreeNode = new DefaultTreeNode<>(node, allBookmarkFolders.stream()
-//                    .filter(t -> t.getData().getId() == bookmark.getFolder().getId())
-//                    .findFirst()
-//                    .orElseThrow(() -> new BookmarkFolderNotFoundException(String.format("Cannot find parent for node %s", node.getName()))));
-//        }
-
         bookmarkFolderNodes = allBookmarkFolders.stream()
-                .skip(1)
                 .map(t -> t.getData())
                 .collect(Collectors.toList());
     }

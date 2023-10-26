@@ -57,16 +57,22 @@ public class BookmarkFolderDaoImpl implements BookmarkFolderDao {
 
             BookmarkFolder bookmarkFolder = new BookmarkFolder();
             bookmarkFolder.setName(name);
-            BookmarkFolder parent = null;
-            if (parentId != null) {
-                parent = entityManager.find(BookmarkFolder.class, parentId);
-            }
-            if (parent != null) {
-                bookmarkFolder.setParent(parent);
-            }
             bookmarkFolder.setUsername(userBean.getUsername());
 
-            entityManager.persist(bookmarkFolder);
+            if (parentId != null) {
+                BookmarkFolder parent = entityManager.find(BookmarkFolder.class, parentId);
+                if (parent == null) {
+                    userTransaction.rollback();
+                    return false;
+                }
+                bookmarkFolder.setParent(parent);
+                parent.getBookmarkFolders().add(bookmarkFolder);
+                entityManager.persist(parent);
+            }
+            else {
+                entityManager.persist(bookmarkFolder);
+            }
+
             userTransaction.commit();
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Cannot save bookmark folder", e);
