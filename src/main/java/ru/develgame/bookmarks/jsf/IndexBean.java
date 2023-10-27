@@ -125,9 +125,7 @@ public class IndexBean implements Serializable, Converter {
             }
         }
 
-        selectedNode.getChildren().clear();
-        selectedNode.getParent().getChildren().remove(selectedNode);
-        selectedNode.setParent(null);
+        loadModel();
         selectedNode = null;
     }
 

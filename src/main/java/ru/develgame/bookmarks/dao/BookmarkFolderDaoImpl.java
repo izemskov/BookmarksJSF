@@ -7,7 +7,6 @@ import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.UserTransaction;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 
 @RequestScoped
 public class BookmarkFolderDaoImpl implements BookmarkFolderDao {
-    @PersistenceContext
+    @Inject
     private EntityManager entityManager;
 
     @Resource

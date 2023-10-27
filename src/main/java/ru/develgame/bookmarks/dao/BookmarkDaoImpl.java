@@ -7,14 +7,13 @@ import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RequestScoped
 public class BookmarkDaoImpl implements BookmarkDao {
-    @PersistenceContext
+    @Inject
     private EntityManager entityManager;
 
     @Resource
@@ -22,9 +21,6 @@ public class BookmarkDaoImpl implements BookmarkDao {
 
     @Inject
     private Logger logger;
-
-    @Inject
-    private BookmarkFolderDao bookmarkFolderDao;
 
     @Override
     public boolean createBookmark(String name, String link, int folderId) {
