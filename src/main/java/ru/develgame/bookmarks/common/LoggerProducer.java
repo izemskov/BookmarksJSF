@@ -1,9 +1,9 @@
 package ru.develgame.bookmarks.common;
 
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import java.util.logging.Logger;
 
 @Named

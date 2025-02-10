@@ -3,8 +3,8 @@ package ru.develgame.bookmarks.jsf.dialog;
 import ru.develgame.bookmarks.dao.BookmarkFolderDao;
 import ru.develgame.bookmarks.jsf.model.BookmarkNode;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 import java.io.Serializable;
 
 @Dependent

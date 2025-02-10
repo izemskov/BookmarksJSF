@@ -1,6 +1,6 @@
 package ru.develgame.bookmarks.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "BOOKMARKS", schema = "APP")

@@ -1,7 +1,7 @@
 package ru.develgame.bookmarks.jsf;
 
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 import java.io.Serializable;
 
 @Named("userBean")
